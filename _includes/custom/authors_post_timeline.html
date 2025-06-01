@@ -21,7 +21,7 @@
             {% assign config_id_normalized = author_config_item.id | downcase %}
             {% if post_author_normalized == config_id_normalized %}
                 {% assign relevant_posts_all = relevant_posts_all | push: post %}
-                {% break %} {# Trovato l'autore, passa al prossimo post #}
+                {% break %} {% comment %} Trovato l'autore, passa al prossimo post {% endcomment %}
             {% endif %}
         {% endfor %}
     {% endfor %}
@@ -56,10 +56,10 @@
                 <div class="branch-line"
                      style="left: {{ calculated_left }}%;
                             background-color: {{ author_config.color | default: '#ccc' }};">
-                            {# Nota: l'opacità per background-color è meglio gestirla via CSS (es. .branch-line { opacity: 0.3; }) se 'color_modify' non funziona #}
-                            {# In alternativa, per color_modify (richiede jekyll-sass-converter avanzato o plugin):
+                            {% comment %} Nota: l'opacità per background-color è meglio gestirla via CSS (es. .branch-line { opacity: 0.3; }) se 'color_modify' non funziona {% endcomment %}
+                            {% comment %} In alternativa, per color_modify (richiede jekyll-sass-converter avanzato o plugin):
                                background-color: {{ author_config.color | default: '#ccc' | color_modify: 'alpha', 0.3 }};
-                            #}
+                            {% endcomment %}
                 </div>
             {% endfor %}
 
@@ -79,10 +79,10 @@
                                          data-url="{{ post.url | relative_url }}"
                                          data-author="{{ author_config_column.name | escape }}"
                                          data-date="{{ post.date | date: '%d %b %Y' }}">
-                                        {# Il cerchio stesso funge da pallino #}
+                                        {% comment %} Il cerchio stesso funge da pallino {% endcomment %}
                                     </div>
                                 {% endif %}
-                                {# Se non è il post di questo autore, lo spazio rimane vuoto nella sua colonna per questa riga #}
+                                {% comment %} Se non è il post di questo autore, lo spazio rimane vuoto nella sua colonna per questa riga {% endcomment %}
                             </div>
                         {% endfor %}
                     </li>

@@ -1,0 +1,15 @@
+---
+# _layouts/timeline-page.html
+# Layout personalizzato che È FIGLIO di 'default.html'.
+# Fornisce un contenitore per la timeline che non ha le restrizioni
+# del layout 'archive.html'.
+layout: default # <--- FONDAMENTALE: Eredita da default.html
+---
+
+{% comment %}
+  Il contenuto di questa pagina (definito in _layouts/home.html o in una pagina
+  che usa 'layout: timeline-page') verrà inserito qui sotto,
+  all'interno del blocco #main.container fornito da _layouts/default.html.
+{% endcomment %}
+
+{{ content }}
