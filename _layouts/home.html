@@ -1,0 +1,12 @@
+---
+layout: archive
+---
+
+{{ content }}
+
+<div class="archive" id="timeline-main-content">
+  <!-- Puoi anche rimuovere il titolo h2 se la pagina è solo la timeline -->
+  <!-- <h2 class="archive__subtitle" style="text-align: center; margin-bottom: 1em; margin-top: 2em;">Attività Recente degli Autori</h2> -->
+  {% include custom/authors_post_timeline.html limit=10 generate_tooltip_html=true %}
+</div>
+

@@ -1,0 +1,146 @@
+.git-timeline-container {
+    font-family: sans-serif;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px; /* o la larghezza che preferisci */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.author-label {
+    font-weight: bold;
+    font-size: 1.2em;
+    flex: 1;
+    text-align: center;
+}
+
+.timeline-body {
+    position: relative; /* Per posizionare le branch-line */
+    display: flex; /* Questo aiuterà a posizionare le linee e la lista ul */
+    padding-top: 20px; /* Spazio per le etichette sopra */
+}
+
+.branch-line {
+    position: absolute;
+    top: 0; /* Inizia dall'alto del timeline-body */
+    bottom: 0; /* Si estende fino in fondo */
+    width: 4px; /* Spessore della linea del ramo */
+    background-color: #e0e0e0; /* Colore di default se non specificato via style */
+    z-index: 1;
+}
+
+.branch-line-1 {
+    left: 25%; /* Posiziona la prima linea a 1/4 della larghezza */
+    transform: translateX(-50%);
+}
+
+.branch-line-2 {
+    left: 75%; /* Posiziona la seconda linea a 3/4 della larghezza */
+    transform: translateX(-50%);
+}
+
+.timeline-nodes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Occupa tutta la larghezza del timeline-body */
+    position: relative; /* Per z-index dei nodi sopra le linee */
+    z-index: 2;
+}
+
+.timeline-entry {
+    display: flex;
+    align-items: center;
+    min-height: 60px; /* Altezza minima per ogni "riga" di post, crea lo spazio verticale */
+    position: relative; /* Per posizionare eventuali linee di connessione tra i pallini */
+}
+
+.node-wrapper {
+    flex: 1; /* Ogni wrapper occupa metà dello spazio */
+    display: flex;
+    justify-content: center; /* Centra il pallino o il placeholder */
+    align-items: center;
+    height: 100%; /* Occupa l'altezza della timeline-entry */
+}
+
+.commit-node {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid white; /* Bordo per farlo risaltare sulla linea */
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    position: relative; /* Per z-index, se necessario */
+    z-index: 3; /* Assicura che i nodi siano sopra le linee */
+}
+
+.commit-node:hover {
+    transform: scale(1.2);
+}
+
+/* Colori specifici per i nodi se non usi style inline */
+/* .author-1-node { background-color: gold; } */
+/* .author-2-node { background-color: deepskyblue; } */
+
+
+/* Stile per il tooltip/popup */
+.post-tooltip {
+    position: absolute; /* Posizionato da JS */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100; /* Sopra tutto il resto */
+    max-width: 300px;
+    font-size: 0.9em;
+    pointer-events: none; /* Così non interferisce con il mouseout dal pallino */
+}
+
+.post-tooltip h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.post-tooltip p {
+    margin-bottom: 8px;
+    color: #555;
+}
+.post-tooltip a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+.post-tooltip a:hover {
+    text-decoration: underline;
+}
+
+/* Per le linee di connessione tra i pallini sullo stesso ramo (più avanzato) */
+/*
+.commit-node::before {
+    content: '';
+    position: absolute;
+    bottom: 100%; // Inizia dalla cima del pallino
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px; // Stesso spessore della branch-line
+    height: 30px; // Altezza della connessione - da aggiustare
+    background-color: inherit; // Eredita il colore del ramo
+    z-index: -1; // Dietro il pallino
+}
+.timeline-entry:first-child .commit-node::before {
+    display: none; // Nessuna linea sopra il primo pallino
+}
+*/

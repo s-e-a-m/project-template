@@ -1,0 +1,7 @@
+- id: "Alice"      # Deve corrispondere al valore di 'author:' nel front matter dei post (case-sensitive o gestito in Liquid)
+  name: "Alice Smith" # Nome da visualizzare nella timeline
+  color: "#FFD700"   # (Oro) Colore per il ramo e i pallini di questo autore
+- id: "Bob"
+  name: "Bob Johnson"
+  color: "#1E90FF"   # (Blu Dodger)
+# Aggiungi altri autori secondo necessità

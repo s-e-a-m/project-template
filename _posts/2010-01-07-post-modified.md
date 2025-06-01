@@ -1,6 +1,7 @@
 ---
 title: "Post: Modified Date"
-last_modified_at: 2016-03-09T16:20:02-05:00
+date: 2023-10-27 10:00:00 +0200
+author: "Alice" # O "Bob", o un altro nome
 categories:
   - Blog
 tags:

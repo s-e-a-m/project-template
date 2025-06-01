@@ -1,5 +1,6 @@
 ---
 title: "Post: Quote"
+author: "Alice" # O "Bob", o un altro nome
 categories:
   - Blog
 tags:

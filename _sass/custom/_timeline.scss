@@ -1,0 +1,139 @@
+// _sass/custom/_timeline.scss
+// _sass/custom/_timeline.scss
+
+.dynamic-authors-timeline {
+  font-family: $sans-serif;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: #fdfdfd;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+  width: 100%; // Assicuriamoci che prenda la larghezza del suo contenitore (.archive)
+
+  .timeline-header {
+    display: flex;
+    // justify-content: space-around; // space-around potrebbe stringere se ci sono pochi autori
+    justify-content: space-between; // Prova space-between o flex-start se ci sono problemi
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $border-color;
+    width: 100%; // Anche l'header deve essere al 100%
+
+    .author-label {
+      flex-grow: 1; // Permette ai label di crescere
+      flex-basis: 0; // Inizia da una base zero per una distribuzione equa
+      text-align: center;
+      font-weight: bold;
+      font-size: $type-size-6;
+      padding: 0 5px;
+      word-break: break-word;
+    }
+  }
+
+  .timeline-body {
+    position: relative;
+    // display: flex; // Questo non è necessario qui, .timeline-nodes lo gestirà
+    width: 100%; // Assicurati che il corpo prenda la larghezza
+    padding-top: 10px;
+
+    .branch-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      z-index: 1;
+      // left e background-color sono settati inline
+    }
+  }
+
+  .timeline-nodes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; // Cruciale!
+    position: relative;
+    z-index: 2;
+
+    .timeline-entry {
+      display: flex; // Questo è FONDAMENTALE per le colonne interne
+      align-items: center;
+      min-height: 50px;
+      position: relative;
+      width: 100%; // Anche l'entry dovrebbe essere al 100%
+
+      .node-wrapper {
+        flex: 1; // Questo distribuisce lo spazio equamente tra i node-wrapper
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        // padding: 0 5px; // Aggiungi un po' di padding se i nodi sono troppo vicini ai bordi o tra loro
+      }
+      .commit-node {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #fff; // Bordo bianco per staccare dalla linea
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        position: relative;
+        z-index: 3; // Sopra la linea del ramo
+
+        &:hover {
+          transform: scale(1.25);
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+        }
+      }
+    }
+  }
+
+  .timeline-read-more {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid $border-color;
+  }
+}
+
+// Stili per il Tooltip (potrebbe essere già parzialmente in MM, adatta se necessario)
+.post-tooltip {
+  position: absolute; // Cruciale per il posizionamento JS
+  background-color: #fff;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 12px 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000; // Sopra tutto il resto
+  max-width: 320px; // Limita la larghezza
+  font-size: $type-size-7; // Variabile MM
+  pointer-events: none; // Per non interferire con mouseout dal pallino
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: $type-size-6;
+    color: $text-color; // Variabile MM
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: $gray; // Variabile MM
+    &.tooltip-meta {
+      font-size: $type-size-8;
+      color: lighten($gray, 20%);
+      margin-bottom: 10px;
+    }
+  }
+  .tooltip-link {
+    // Stile per il link "Leggi di più" nel tooltip
+    // Usa lo stile dei link di MM o personalizza
+    color: $link-color; // Variabile MM
+    text-decoration: none;
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

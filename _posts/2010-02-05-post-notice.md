@@ -1,5 +1,6 @@
 ---
 title: "Post: Notice"
+author: "Bob" # O "Bob", o un altro nome
 categories:
   - Blog
 tags:

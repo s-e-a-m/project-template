@@ -1,0 +1,61 @@
+{% comment %} Definisci i nomi degli autori che vuoi visualizzare {% endcomment %}
+{% assign author1_name = "Alice" %}
+{% assign author2_name = "Bob" %}
+{% assign author1_color = "gold" %}   {# Colore per i pallini di Alice #}
+{% assign author2_color = "deepskyblue" %} {# Colore per i pallini di Bob #}
+
+{% comment %} Recupera tutti i post e ordinali cronologicamente (dal più vecchio al più recente) {% endcomment %}
+{% assign all_posts_sorted = site.posts %}
+
+<div class="git-timeline-container">
+    <div class="timeline-header">
+        <div class="author-label" style="color: {{ author1_color }};">{{ author1_name }}</div>
+        <div class="author-label" style="color: {{ author2_color }};">{{ author2_name }}</div>
+    </div>
+
+    <div class="timeline-body">
+        <div class="branch-line branch-line-1" style="background-color: {{ author1_color | default: '#ccc' | opacify: 0.5 }};"></div>
+        <div class="branch-line branch-line-2" style="background-color: {{ author2_color | default: '#ccc' | opacify: 0.5 }};"></div>
+
+        <ul class="timeline-nodes">
+            {% for post in all_posts_sorted %}
+                {% if post.author == author1_name or post.author == author2_name %}
+                    <li class="timeline-entry">
+                        <div class="node-wrapper">
+                            {% if post.author == author1_name %}
+                                <div class="commit-node author-1-node"
+                                     style="background-color: {{ author1_color }};"
+                                     data-title="{{ post.title | escape }}"
+                                     data-excerpt="{{ post.excerpt | strip_html | truncatewords: 25 | escape }}"
+                                     data-url="{{ post.url | relative_url }}">
+                                     <!-- Pallino per l'autore 1 -->
+                                </div>
+                            {% else %}
+                                <div class="node-placeholder"></div> {# Spazio vuoto se il post non è di questo autore #}
+                            {% endif %}
+                        </div>
+                        <div class="node-wrapper">
+                             {% if post.author == author2_name %}
+                                <div class="commit-node author-2-node"
+                                     style="background-color: {{ author2_color }};"
+                                     data-title="{{ post.title | escape }}"
+                                     data-excerpt="{{ post.excerpt | strip_html | truncatewords: 25 | escape }}"
+                                     data-url="{{ post.url | relative_url }}">
+                                     <!-- Pallino per l'autore 2 -->
+                                </div>
+                            {% else %}
+                                <div class="node-placeholder"></div> {# Spazio vuoto se il post non è di questo autore #}
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="post-tooltip" class="post-tooltip" style="display:none;">
+    <h4 id="tooltip-title"></h4>
+    <p id="tooltip-excerpt"></p>
+    <a id="tooltip-link" href="#">Leggi di più...</a>
+</div>

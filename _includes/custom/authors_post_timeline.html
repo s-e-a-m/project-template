@@ -1,0 +1,120 @@
+{% comment %}
+  _includes/custom/authors_post_timeline.html
+  Genera una timeline di post per autori configurati.
+
+  Parametri (tramite include):
+  - limit: (Numero) Numero massimo di post da visualizzare. Default: 10.
+  - show_read_more: (Booleano) Mostra il pulsante "Leggi Tutto". Default: true.
+  - generate_tooltip_html: (Booleano) Genera l'HTML per il tooltip. Default: true.
+{% endcomment %}
+
+{% assign timeline_authors_config = site.data.authors_timeline %}
+{% assign display_limit = include.limit | default: 10 %}
+
+{% if timeline_authors_config and timeline_authors_config.size > 0 %}
+    {% comment %} 1. Raccogli tutti i post rilevanti (scritti da autori configurati) e ordinali {% endcomment %}
+    {% comment %} site.posts è già ordinato dal più recente al meno recente di default {% endcomment %}
+    {% assign relevant_posts_all = "" | split: "" %}
+    {% for post in site.posts %}
+        {% for author_config_item in timeline_authors_config %}
+            {% assign post_author_normalized = post.author | downcase %}
+            {% assign config_id_normalized = author_config_item.id | downcase %}
+            {% if post_author_normalized == config_id_normalized %}
+                {% assign relevant_posts_all = relevant_posts_all | push: post %}
+                {% break %} {# Trovato l'autore, passa al prossimo post #}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    {% assign total_relevant_posts_count = relevant_posts_all.size %}
+
+    <div class="git-timeline-container dynamic-authors-timeline">
+        {% comment %} ----- HEADER CON I NOMI DEGLI AUTORI ----- {% endcomment %}
+        <div class="timeline-header">
+            {% for author_config in timeline_authors_config %}
+                <div class="author-label" style="color: {{ author_config.color | default: '#333' }};">
+                    {{ author_config.name | escape }}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% comment %} ----- CORPO DELLA TIMELINE (LINEE E NODI) ----- {% endcomment %}
+        <div class="timeline-body">
+            {% comment %} Linee verticali dei rami (una per autore) {% endcomment %}
+            {% assign num_authors = timeline_authors_config.size %}
+            {% assign base_percentage_per_author = 100.0 | divided_by: num_authors %}
+            {% assign offset_for_centering = base_percentage_per_author | divided_by: 2.0 %}
+
+            {% for author_config in timeline_authors_config %}
+                {% assign calculated_left = base_percentage_per_author | times: forloop.index0 | plus: offset_for_centering %}
+
+                {% comment %} --- INIZIO BLOCCO DI DEBUG (DECOMMENTA PER USARE) ---
+                <p style="position: absolute; top: {{ forloop.index0 | times: 20 }}px; left: 0; background: white; z-index: 1000; color: red; font-size: 10px; padding: 2px; border: 1px solid red;">
+                    DEBUG Author {{ forloop.index }}: ID={{ author_config.id }}, Left={{ calculated_left }}% (Base:{{ base_percentage_per_author }}%, Offset:{{ offset_for_centering }}%)
+                </p>
+                {% endcomment %}
+
+                <div class="branch-line"
+                     style="left: {{ calculated_left }}%;
+                            background-color: {{ author_config.color | default: '#ccc' }};">
+                            {# Nota: l'opacità per background-color è meglio gestirla via CSS (es. .branch-line { opacity: 0.3; }) se 'color_modify' non funziona #}
+                            {# In alternativa, per color_modify (richiede jekyll-sass-converter avanzato o plugin):
+                               background-color: {{ author_config.color | default: '#ccc' | color_modify: 'alpha', 0.3 }};
+                            #}
+                </div>
+            {% endfor %}
+
+            {% comment %} Lista dei nodi (post) {% endcomment %}
+            <ul class="timeline-nodes">
+                {% for post in relevant_posts_all limit: display_limit %}
+                    <li class="timeline-entry">
+                        {% for author_config_column in timeline_authors_config %}
+                            <div class="node-wrapper">
+                                {% assign post_author_normalized = post.author | downcase %}
+                                {% assign column_author_id_normalized = author_config_column.id | downcase %}
+                                {% if post_author_normalized == column_author_id_normalized %}
+                                    <div class="commit-node"
+                                         style="background-color: {{ author_config_column.color | default: '#000' }};"
+                                         data-title="{{ post.title | escape }}"
+                                         data-excerpt="{{ post.excerpt | strip_html | truncatewords: 20 | escape }}"
+                                         data-url="{{ post.url | relative_url }}"
+                                         data-author="{{ author_config_column.name | escape }}"
+                                         data-date="{{ post.date | date: '%d %b %Y' }}">
+                                        {# Il cerchio stesso funge da pallino #}
+                                    </div>
+                                {% endif %}
+                                {# Se non è il post di questo autore, lo spazio rimane vuoto nella sua colonna per questa riga #}
+                            </div>
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% comment %} ----- PULSANTE "LEGGI TUTTO" ----- {% endcomment %}
+        {% if total_relevant_posts_count > display_limit %}
+            {% if include.show_read_more == nil or include.show_read_more == true %}
+                <div class="timeline-read-more">
+                    <a href="{{ '/full-post-timeline/' | relative_url }}" class="btn btn--info">
+                        Storico Completo ({{ total_relevant_posts_count }} post)
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% comment %} ----- TOOLTIP HTML (UNICO PER LA PAGINA) ----- {% endcomment %}
+    {% if include.generate_tooltip_html == nil or include.generate_tooltip_html == true %}
+        <div id="timeline-post-tooltip" class="post-tooltip" style="display:none;">
+            <h4 id="tooltip-title"></h4>
+            <p id="tooltip-excerpt"></p>
+            <p id="tooltip-author-date" class="tooltip-meta"></p>
+            <a id="tooltip-link" href="#" class="tooltip-link">Leggi di più...</a>
+        </div>
+    {% endif %}
+
+{% else %}
+    <p class="notice--warning">
+        Configurazione autori per la timeline non trovata in <code>_data/authors_timeline.yml</code> o nessun autore definito.
+        <br> Oppure, non ci sono post degli autori configurati.
+    </p>
+{% endif %}
